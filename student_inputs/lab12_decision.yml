@@ -1,6 +1,25 @@
-priority_harm: REPLACE
-primary_metric: REPLACE
-tolerance: REPLACE
-evidence: REPLACE
-limitation: REPLACE
-recommendation: REPLACE
+priority_harm: 'Omision de casos positivos reales (falso negativo / recall bajo): el sistema prioriza
+  casos para revision humana, y un caso no detectado no se revisa. Se pondera sobre los falsos positivos,
+  que solo generan carga de revision adicional y no una intervencion automatica.'
+primary_metric: recall_gap entre protected_group (G1 vs G2), calculado con fairlearn MetricFrame.difference(method='between_groups'),
+  contrastado contra max_recall_gap de configs/governance.yml. Se reporta junto con fpr_gap como metrica
+  secundaria porque ambos danos coexisten (revision perdida vs. carga de falsas alarmas).
+tolerance: max_recall_gap=0.16 y max_fpr_gap=0.16 (configs/governance.yml). El modelo logistic queda dentro
+  de ambas tolerancias (recall_gap=0.138, fpr_gap=0.125); el modelo tree las excede (recall_gap=0.181,
+  fpr_gap=0.168).
+evidence: 'logistic: recall global 0.717, recall G1=0.653 (n=101) vs G2=0.791 (n=59), fpr G1=0.250 vs
+  G2=0.375, recall_gap=0.138, fpr_gap=0.125, 0.065s de entrenamiento, 3.56 KB. tree: recall global 0.717
+  (igual), fpr global 0.309 (peor), recall_gap=0.181, fpr_gap=0.168 (ambos exceden las puertas), 0.081s
+  (+26%), 7.87 KB (+121%). La celda interseccional con mayor soporte, G1 | 45-59 (n=35), es la de peor
+  desempeno real en ambos modelos (recall 0.588-0.647, fpr 0.28-0.39).'
+limitation: 'Las celdas interseccionales G2 | 18-29 (n=11), G2 | 30-44 (n=14) y G2 | 45-59 (n=8) tienen
+  muy poco soporte; valores extremos (accuracy/recall=1.0, fpr=0.0 o 1.0) ahi son ruido de muestra pequena,
+  no evidencia confiable. Una brecha observada tampoco prueba discriminacion causal por si sola: age_band
+  sigue siendo variable predictora y configs/governance.yml la marca como sensible junto a protected_group,
+  por lo que puede actuar de proxy indirecto aun excluyendo protected_group del modelo. El dataset es
+  sintetico (docs/DATASET_CARD.md) y no representa personas ni tasas reales.'
+recommendation: 'Preferir el modelo logistic sobre tree para LAB13: con el mismo recall global, tree empeora
+  el fpr, ambas brechas (fuera de las puertas de gobernanza) y el costo (tiempo de entrenamiento y tamano
+  serializado), sin ninguna ventaja medible (no se justifica el costo adicional, criterio Green AI). Aun
+  con logistic, se recomienda revision humana reforzada para el subgrupo G1 de 45 a 59 anios (n=35, el
+  de mayor soporte y peor desempeno) antes de cualquier despliegue.'
