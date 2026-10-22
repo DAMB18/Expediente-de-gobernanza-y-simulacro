@@ -1,9 +1,21 @@
-purpose: REPLACE
-assisted_decision: REPLACE
-users: REPLACE
-affected_population: REPLACE
-owner: REPLACE
-non_predictive_alternative: REPLACE
-out_of_scope_use: REPLACE
-withdrawal_condition: REPLACE
-appeal_mechanism: REPLACE
+purpose: Priorizar casos sinteticos de riesgo territorial para revision humana, no
+  para intervencion automatica.
+assisted_decision: El sistema asigna una prioridad de revision (score y estado de
+  las puertas de calidad) a cada caso sintetico; un revisor humano decide si escala,
+  pide mas informacion o cierra el caso.
+users: Analistas y supervisores del equipo operativo que usan el tablero (app.py)
+  para ordenar su cola diaria de revision.
+affected_population: Personas y hogares sinteticos representados en los casos territoriales,
+  incluidos los subgrupos marcados en protected_group y age_band.
+owner: Product Owner como responsable (A) segun student_inputs/raci.csv, con el Data
+  Scientist como responsable tecnico (R) de validacion del modelo.
+non_predictive_alternative: Ordenar la cola de revision por fecha de recepcion (FIFO)
+  o por una regla fija y auditable (ej. mayor exposure declarado), sin modelo predictivo.
+out_of_scope_use: No usar para intervencion automatica, decision de elegibilidad de
+  un programa, ni para declarar una emergencia (usos prohibidos explicitos en configs/governance.yml).
+withdrawal_condition: Retirar el sistema si recall_gap o fpr_gap superan max_recall_gap/max_fpr_gap
+  de configs/governance.yml en produccion, o si una auditoria externa reporta dano
+  desproporcionado a un subgrupo protegido.
+appeal_mechanism: Toda persona afectada por una decision escalada a partir de la priorizacion
+  puede solicitar revision humana adicional ante el Institutional Owner, quien debe
+  responder con la evidencia usada y la justificacion.

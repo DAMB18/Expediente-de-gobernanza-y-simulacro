@@ -1,5 +1,5 @@
 stakeholder,benefit,harm,power,participation
-Affected person,REPLACE,REPLACE,low,REPLACE
-Operator,REPLACE,REPLACE,medium,REPLACE
-Institutional owner,REPLACE,REPLACE,high,REPLACE
-Data team,REPLACE,REPLACE,medium,REPLACE
+Affected person,Revision mas rapida y consistente de su caso declarado,"Ser marcado con prioridad incorrecta por error del modelo, retrasando o sesgando la atencion de su caso",low,Puede apelar la decision de priorizacion; no participa en el diseno del modelo
+Operator,"Cola de trabajo ordenada por riesgo relativo, reduciendo el tiempo de triage manual",Exceso de confianza en el score sin validar la evidencia subyacente (sesgo de automatizacion),medium,Usa el tablero diario y reporta discrepancias al equipo de datos; no define las reglas de gobernanza
+Institutional owner,Evidencia documentada de las decisiones de despliegue y de las puertas de calidad cumplidas,Responsabilidad reputacional y legal si el sistema causa dano documentado a un subgrupo protegido,high,Aprueba o rechaza el despliegue (rol A en RACI) y autoriza el retiro del sistema
+Data team,Base de codigo y datos sinteticos reutilizable para auditorias futuras,Carga de mantenimiento y responsabilidad por brechas no detectadas en las pruebas automatizadas,medium,"Disena, entrena, audita y documenta el modelo; reporta hallazgos al Institutional Owner"
