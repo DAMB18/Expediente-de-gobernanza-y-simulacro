@@ -1,8 +1,8 @@
 # Incident Runbook — complete after LAB13
 
-1. Detection and classification: REPLACE
-2. Containment authority: REPLACE
-3. Evidence preservation: REPLACE
-4. Internal and affected-party communication: REPLACE
-5. Rollback or safe baseline: REPLACE
-6. Postmortem, owner and due date: REPLACE
+1. **Detection and classification**: el monitoreo compara `recall`, `recall_gap`, `fpr_gap`, `latency_ms` y `model_kb` contra las puertas de `configs/governance.yml` en cada corrida de `scripts/lab13_governance.py`. Una puerta fallida (cualquier entrada en `decision.failed`) dispara el incidente; se clasifica por severidad segun que puerta falla y cuantas personas de que subgrupo quedan afectadas (ver `reports/lab11/risk_register_scored.csv` para el riesgo asociado a cada puerta).
+2. **Containment authority**: el **Institutional Owner** (Accountable de "Incident response" en `student_inputs/raci.csv`) tiene autoridad para contener de inmediato: pasar la recomendacion a `REVIEW` y suspender el uso del modelo afectado hasta nueva evaluacion.
+3. **Evidence preservation**: antes de revertir nada, preservar una copia de `reports/lab12/*`, `reports/lab13/deployment_decision.json`, el archivo del modelo (`models/*.joblib`) y la version exacta de `configs/governance.yml` vigente en el momento del incidente — igual que registra `scripts/simulate_incident.py` ("evidence: preserved report and model version").
+4. **Internal and affected-party communication**: notificar de inmediato al Data Scientist y al ML Engineer (responsables tecnicos). Una vez evaluado el impacto, informar a los representantes de las personas afectadas ("Affected representatives" en el RACI) dentro de un plazo definido por el Institutional Owner, sin exponer datos personales (en este proyecto el dataset es sintetico, pero el principio aplica igual a un despliegue real).
+5. **Rollback or safe baseline**: volver a desplegar la ultima version del modelo que haya pasado las cinco puertas de `configs/governance.yml` (el `logistic` commiteado en LAB13), o degradar temporalmente a la alternativa no predictiva de `student_inputs/lab11_impact.yml` (cola FIFO) mientras se investiga. Aumentar la proporcion de revision humana hasta resolver el incidente.
+6. **Postmortem, owner and due date**: el **Institutional Owner** es responsable del postmortem (`reports/lab13/INCIDENT_POSTMORTEM.md`), con el Data Scientist y el ML Engineer documentando causa raiz y correccion. Plazo sugerido: cerrar el postmortem dentro de 5 dias habiles despues de contener el incidente, y registrar la fecha real de cierre en el propio documento.
